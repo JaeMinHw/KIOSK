@@ -15,7 +15,7 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
     public CameraSurfaceView(Context context) {
         super(context);
-        mCameraFacing  = Camera.CameraInfo.CAMERA_FACING_BACK;
+        mCameraFacing  = Camera.CameraInfo.CAMERA_FACING_FRONT;
 
 
         init(context);
@@ -26,6 +26,8 @@ public class CameraSurfaceView extends SurfaceView implements SurfaceHolder.Call
 
         init(context);
     }
+
+
 
     private void init(Context context){
         holder = getHolder();

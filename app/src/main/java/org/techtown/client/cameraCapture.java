@@ -1,4 +1,5 @@
 package org.techtown.client;
+/*
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -175,3 +176,135 @@ public class cameraCapture extends AppCompatActivity {
 }
 
 
+*/
+
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.SurfaceTexture;
+import android.graphics.drawable.BitmapDrawable;
+import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraDevice;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.params.StreamConfigurationMap;
+import android.os.Bundle;
+import android.util.Base64;
+import android.util.Size;
+import android.view.Surface;
+import android.view.TextureView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+
+
+
+public class cameraCapture extends AppCompatActivity implements Camera2APIs.Camera2Interface, TextureView.SurfaceTextureListener {
+    ImageView imageView;
+    private Camera2APIs mCamera;
+    private TextureView mTextureView;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_camera_capture);
+
+        imageView = findViewById(R.id.imageView);
+
+
+        mTextureView = (TextureView)findViewById(R.id.textureView);
+        mTextureView.setSurfaceTextureListener(this);
+
+        mCamera = new Camera2APIs(this);
+
+    }
+
+
+    private void openCamera() {
+        CameraManager cameraManager = mCamera.CameraManager_1(this);
+        String cameraId = mCamera.CameraCharacteristics_2(cameraManager);
+        mCamera.CameraDevice_3(cameraManager,cameraId);
+    }
+
+    public void onCameraDeviceOpened(CameraDevice cameraDevice, Size cameraSize) {
+        SurfaceTexture texture = mTextureView.getSurfaceTexture();
+        texture.setDefaultBufferSize(800, 800);
+        Surface surface = new Surface(texture);
+
+        mCamera.CaptureSession_4(cameraDevice, surface);
+        mCamera.CaptureRequest_5(cameraDevice, surface);
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        if (mTextureView.isAvailable()) {
+            openCamera();
+        } else {
+            mTextureView.setSurfaceTextureListener(this);
+        }
+    }
+
+    /* Surface Callbacks */
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
+        openCamera();
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i1) {
+
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
+        return true;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case 101:
+                if(grantResults.length > 0){
+                    if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                        Toast.makeText(this, "카메라 권한 사용자가 승인함",Toast.LENGTH_LONG).show();
+                    }
+                    else if(grantResults[0] == PackageManager.PERMISSION_DENIED){
+                        Toast.makeText(this, "카메라 권한 사용자가 허용하지 않음.",Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        Toast.makeText(this, "수신권한 부여받지 못함.",Toast.LENGTH_LONG).show();
+                    }
+                }
+        }
+    }
+
+
+    private void closeCamera() {
+        mCamera.closeCamera();
+    }
+
+    @Override
+    protected void onPause() {
+        closeCamera();
+        super.onPause();
+    }
+
+
+}

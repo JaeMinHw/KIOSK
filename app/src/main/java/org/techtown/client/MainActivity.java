@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        kiosk_login soft = new kiosk_login();
+        soft.hidesoftkey(getApplicationContext());
+
         Intent intetnt = getIntent();
 
         idkey = this;
@@ -239,6 +243,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
 
 

@@ -15,10 +15,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <org.techtown.client.CameraSurfaceView
-            android:id="@+id/surfaceview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        <TextureView
+            android:id="@+id/textureView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </androidx.camera.view.PreviewView>
 
     <LinearLayout
