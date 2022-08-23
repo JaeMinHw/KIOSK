@@ -25,7 +25,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 
 public class payments extends AppCompatActivity {
-    ProgressDialog payDialog;
+
 
     String resultText ="";
     public void onBackPressed() {
@@ -35,13 +35,6 @@ public class payments extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payments);
-
-        payDialog = new ProgressDialog(this);
-        payDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        payDialog.setMessage("Please wait.....");
-
-        payDialog.show();
-
 
         try {
             send_pay();
@@ -61,14 +54,14 @@ public class payments extends AppCompatActivity {
 
 
         if(success_state.equals(1)) { // 실제 결과 성공이면 넘어가게 수정
-             payDialog.dismiss();
+
              Intent intent = new Intent(getApplicationContext(), cameraCapture.class);
              startActivity(intent);
          }
          else { // 결제가 안되면 처음으로 돌아가게
              clean_info c = new clean_info();
              c.clean();
-             payDialog.dismiss();
+
              Intent intent = new Intent(getApplicationContext(), MainActivity.class);
              startActivity(intent);
          }
@@ -85,7 +78,7 @@ class Task extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... params) {
         URL url;
         try {
-            url = new URL("http://192.168.0.12:8000/mufiApp/kiosk/payments/"+login_mem.ID+"/"+kiosk_info.kiosk_id+"/"+kiosk_info.store_id+"/"+login_mem.price+"/"+login_mem.goods); // 마지막에는 / 넣지 말기
+            url = new URL(serveraddress.address+"/mufiApp/kiosk/payments/"+login_mem.ID+"/"+kiosk_info.kiosk_id+"/"+kiosk_info.store_id+"/"+login_mem.price+"/"+login_mem.goods); // 마지막에는 / 넣지 말기
 
             Log.e("Address Tag : ",""+url);
 

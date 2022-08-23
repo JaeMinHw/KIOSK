@@ -2,8 +2,10 @@ package org.techtown.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -20,6 +22,8 @@ public class choose_count extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_count);
+
+        hidesoftkey();
 
         Intent intent = getIntent();
 
@@ -59,19 +63,19 @@ public class choose_count extends AppCompatActivity {
                 button.setVisibility(View.VISIBLE);
             }
         });
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // 수량 선택하고 결제 요청 부분으로 이동하고 결제 완료가 나면 사진찍기
-//                login_mem.photo_count = count;
-//                login_mem.goods = login_mem.frame_num + login_mem.photo_count;
-//                Intent intent = new Intent(getApplicationContext(), payments.class);
-//                startActivity(intent);
-//            }
-//        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 수량 선택하고 결제 요청 부분으로 이동하고 결제 완료가 나면 사진찍기
+                login_mem.photo_count = count;
+                login_mem.goods = login_mem.frame_num + login_mem.photo_count;
+                Intent intent = new Intent(getApplicationContext(), payments.class);
+                startActivity(intent);
+            }
+        });
 
 
-        //테스트용
+        /*//테스트용
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +85,24 @@ public class choose_count extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), cameraCapture.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
+
+
+    public void hidesoftkey() {
+        getWindow().setWindowAnimations(0);
+        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
+        int newUiOptions = uiOptions;
+        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        if (isImmersiveModeEnabled) {
+            Log.i("Is on?", "Turning immersive mode mode off. ");
+        } else {
+            Log.i("Is on?", "Turning immersive mode mode on.");
+        }
+        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+    }
+
 }

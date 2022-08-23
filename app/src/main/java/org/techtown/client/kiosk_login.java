@@ -32,10 +32,6 @@ public class kiosk_login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kiosk_login);
 
-        hidesoftkey(getApplicationContext());
-
-
-
         idkey = this;
         passkey = this;
 
@@ -47,7 +43,7 @@ public class kiosk_login extends AppCompatActivity {
         logo = findViewById(R.id.imageView15);
 
 
-        SharedPreferences sf = getSharedPreferences("/data/data/org.techtown.client/shared_prefs/rebuild_preference.xml",MODE_PRIVATE);
+        SharedPreferences sf = getSharedPreferences("test",MODE_PRIVATE);
         String idvalue = sf.getString("ID","");
         String pwvalue = sf.getString("PASSKEY","");
 
@@ -72,10 +68,16 @@ public class kiosk_login extends AppCompatActivity {
 
                     // 서버로 아이디와 비밀번호 확인
 
-                    PreferenceManager.setString(idkey, "ID", idsave);
-                    PreferenceManager.setString(passkey, "PASSKEY", pwsave);
+                    SharedPreferences sf = getSharedPreferences("test",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sf.edit();
+
+                    editor.putString("ID",idsave);
+                    editor.putString("PASSKEY",pwsave);
+
                     kiosk_info.kiosk_id = idsave;
                     kiosk_info.store_id = pwsave;
+
+                    editor.apply();
 
                     Toast.makeText(getApplicationContext(),"아이디 : " + kiosk_info.store_id + "비밀번호 : " + kiosk_info.kiosk_id,Toast.LENGTH_SHORT).show();
 
@@ -86,14 +88,12 @@ public class kiosk_login extends AppCompatActivity {
 
 //                    Task t = new Task();
 //                    try {
-//                        result = t.execute("/mufiApp/kiosk/payments/"+idsave+"/"+pwsave).get();
+//                        result = t.execute(serveraddress.address+"/mufiApp/kiosk/payments/"+idsave+"/"+pwsave).get();
 //                        if(result.equals("SUCCESS")) {
 //                            PreferenceManager.setString(idkey, "ID", idEdit.getText().toString());
 //                            PreferenceManager.setString(passkey, "PASSKEY", pwEdit.getText().toString());
 //                            kiosk_info.kiosk_id = idEdit.getText().toString();
 //                            kiosk_info.store_id = pwEdit.getText().toString();
-//                            PreferenceManager.clear(idkey);
-//                            PreferenceManager.clear(passkey);
 //                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 //                            startActivity(intent);
 //                        }
@@ -106,7 +106,6 @@ public class kiosk_login extends AppCompatActivity {
 //                        e.printStackTrace();
 //                    }
 
-
                 }
                 else {
                     Toast.makeText(getApplicationContext(),"아이디와 패스 키를 입력해주세요",Toast.LENGTH_SHORT).show();
@@ -117,24 +116,6 @@ public class kiosk_login extends AppCompatActivity {
         });
 
     }
-
-    public void hidesoftkey(Context context) {
-        getWindow().setWindowAnimations(0);
-        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
-        int newUiOptions = uiOptions;
-        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
-        if (isImmersiveModeEnabled) {
-            Log.i("Is on?", "Turning immersive mode mode off. ");
-        } else {
-            Log.i("Is on?", "Turning immersive mode mode on.");
-        }
-        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
-        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
-    }
-
-
 
 }
 

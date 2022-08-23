@@ -153,5 +153,6 @@ public class Camera2APIs {
             mCameraDevice = null;
         }
     }
+
 }
 

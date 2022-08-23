@@ -2,10 +2,12 @@ package org.techtown.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -39,6 +41,8 @@ public class choo_pic extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choo_pic);
 
+        hidesoftkey();
+
         Intent intent = getIntent();
 
         button3 = findViewById(R.id.button3);
@@ -54,12 +58,6 @@ public class choo_pic extends AppCompatActivity {
 
 
         imageView12.setImageBitmap(myBitmap);
-
-
-        uploadFile();
-
-
-
 
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,7 +78,7 @@ public class choo_pic extends AppCompatActivity {
     }
 
 
-    private boolean uploadFile() {
+    /*private boolean uploadFile() {
         String path[] = new String[11];
         File[] file = new File[11];
         for(int i=1;i<=10;i++) {
@@ -107,7 +105,7 @@ public class choo_pic extends AppCompatActivity {
                     .build();
 
             Request request=new Request.Builder()
-                    .url("http://192.168.0.18:8000/mufiApp/kiosk/pictures/upload/"+login_mem.ID+"/"+login_mem.orderId)
+                    .url(serveraddress.address+"/mufiApp/kiosk/pictures/upload/"+login_mem.ID+"/"+login_mem.orderId)
                     .post(requestBody)
                     .build();
 
@@ -131,5 +129,23 @@ public class choo_pic extends AppCompatActivity {
             return false;
         }
     }
+
+*/
+    public void hidesoftkey() {
+        getWindow().setWindowAnimations(0);
+        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
+        int newUiOptions = uiOptions;
+        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        if (isImmersiveModeEnabled) {
+            Log.i("Is on?", "Turning immersive mode mode off. ");
+        } else {
+            Log.i("Is on?", "Turning immersive mode mode on.");
+        }
+        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+    }
+
 
 }

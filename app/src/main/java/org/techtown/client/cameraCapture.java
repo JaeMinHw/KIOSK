@@ -1,10 +1,10 @@
 package org.techtown.client;
-/*
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.graphics.Bitmap;
@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -51,9 +52,11 @@ public class cameraCapture extends AppCompatActivity {
         Intent intent = getIntent();
         super.onCreate(savedInstanceState);
 
+        hidesoftkey();
+
         setContentView(R.layout.activity_camera_capture);
 
-        surfaceView = findViewById(R.id.surfaceview);
+        surfaceView = findViewById(R.id.cameraSurfaceView);
         imageView = findViewById(R.id.imageView);
         imageView.setClipToOutline(true);
 
@@ -173,11 +176,29 @@ public class cameraCapture extends AppCompatActivity {
     }
 
 
+    public void hidesoftkey() {
+        getWindow().setWindowAnimations(0);
+        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
+        int newUiOptions = uiOptions;
+        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        if (isImmersiveModeEnabled) {
+            Log.i("Is on?", "Turning immersive mode mode off. ");
+        } else {
+            Log.i("Is on?", "Turning immersive mode mode on.");
+        }
+        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+    }
+
+
+
 }
 
 
-*/
 
+/*
 
 import android.app.Activity;
 import android.content.Context;
@@ -254,7 +275,9 @@ public class cameraCapture extends AppCompatActivity implements Camera2APIs.Came
         }
     }
 
-    /* Surface Callbacks */
+    */
+/* Surface Callbacks *//*
+
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
         openCamera();
@@ -307,4 +330,4 @@ public class cameraCapture extends AppCompatActivity implements Camera2APIs.Came
     }
 
 
-}
+}*/

@@ -31,7 +31,7 @@
             android:exported="false"
             android:screenOrientation="landscape"/>
         <activity
-            android:name=".kiosk_login"
+            android:name=".cameraCapture"
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
@@ -59,7 +59,7 @@
             android:exported="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".cameraCapture"
+            android:name=".kiosk_login"
             android:exported="true"
             android:screenOrientation="landscape">
             <intent-filter>

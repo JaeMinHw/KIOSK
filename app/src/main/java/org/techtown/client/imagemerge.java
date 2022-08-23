@@ -28,6 +28,7 @@ public class imagemerge extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_imagemerge);
+
         image16 = findViewById(R.id.imageView16);
 
         frame = BitmapFactory.decodeResource(getResources(),R.drawable.realsize_frame);
@@ -41,7 +42,6 @@ public class imagemerge extends AppCompatActivity {
         image16.setImageBitmap(frame);
         saveBitmapToJpeg(frame);
 
-//        Intent intent = new Intent(getApplicationContext(),choo_pic.class);
         Intent intent = new Intent(getApplicationContext(),adprintPhoto.class);
         startActivity(intent);
 
@@ -52,10 +52,10 @@ public class imagemerge extends AppCompatActivity {
         Bitmap mergeB = Bitmap.createBitmap(bitmap0.getWidth(),bitmap0.getHeight(),bitmap0.getConfig());
         Canvas canvas = new Canvas(mergeB);
         canvas.drawBitmap(bitmap0,0,0,null);
-        canvas.drawBitmap(bitmap1,23,26,null);
-        canvas.drawBitmap(bitmap2,23,382,null);
-        canvas.drawBitmap(bitmap3,23,742,null);
-        canvas.drawBitmap(bitmap4,23,1102,null);
+        canvas.drawBitmap(bitmap1,24,26,null);
+        canvas.drawBitmap(bitmap2,24,382,null);
+        canvas.drawBitmap(bitmap3,24,742,null);
+        canvas.drawBitmap(bitmap4,24,1102,null);
 
         return mergeB;
     }

@@ -2,6 +2,7 @@ package org.techtown.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -9,7 +10,20 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Bundle;
 
+import android.util.Log;
+import android.view.View;
 import android.widget.VideoView;
+
+import java.io.File;
+import java.io.IOException;
+
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class adprintPhoto extends AppCompatActivity {
     VideoView videoView;
@@ -19,12 +33,18 @@ public class adprintPhoto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_adprint_photo);
 
-//        kiosk_login soft = new kiosk_login();
-//        soft.hidesoftkey();
+        hidesoftkey();
 
         videoView = findViewById(R.id.videoView);
 
-        Uri videoUri = Uri.parse("http://192.168.0.18:8000/mufiApp/kiosk/pictures/play/ads");
+        boolean check = uploadFile();
+
+        if(check == true) {
+            Intent intent = new Intent(getApplicationContext(), choo_pic.class);
+            startActivity(intent);
+        }
+
+        Uri videoUri = Uri.parse(serveraddress.address+"/mufiApp/kiosk/pictures/play/ads");
         videoView.setVideoURI(videoUri);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -35,7 +55,7 @@ public class adprintPhoto extends AppCompatActivity {
         });
 
     }
-
+/*
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -52,7 +72,78 @@ public class adprintPhoto extends AppCompatActivity {
         super.onPause();
         //비디오 일시 정지
         if(videoView!=null && videoView.isPlaying()) videoView.pause();
+    }*/
+
+
+    private boolean uploadFile() {
+        String path[] = new String[11];
+        File[] file = new File[11];
+        for(int i=1;i<=10;i++) {
+            path[i] = "/data/data/org.techtown.client/cache/" + kiosk_info.kiosk_id + "_" + i + ".png";
+            file[i]=new File(path[i]);
+        }
+        path[0] = "/data/data/org.techtown.client/cache/" + kiosk_info.kiosk_id+"_"+"0"+".png";
+        file[0] = new File(path[0]);
+
+        try{
+            RequestBody requestBody=new MultipartBody.Builder().setType(MultipartBody.FORM)
+                    .addFormDataPart("image0",file[0].getName(),RequestBody.create(MediaType.parse("image/*"),file[0]))
+                    .addFormDataPart("image1",file[1].getName(),RequestBody.create(MediaType.parse("image/*"),file[1]))
+                    .addFormDataPart("image2",file[2].getName(),RequestBody.create(MediaType.parse("image/*"),file[2]))
+                    .addFormDataPart("image3",file[3].getName(),RequestBody.create(MediaType.parse("image/*"),file[3]))
+                    .addFormDataPart("image4",file[4].getName(),RequestBody.create(MediaType.parse("image/*"),file[4]))
+                    .addFormDataPart("image5",file[5].getName(), RequestBody.create(MediaType.parse("image/*"),file[5]))
+                    .addFormDataPart("image6",file[6].getName(),RequestBody.create(MediaType.parse("image/*"),file[6]))
+                    .addFormDataPart("image7",file[7].getName(),RequestBody.create(MediaType.parse("image/*"),file[7]))
+                    .addFormDataPart("image8",file[8].getName(),RequestBody.create(MediaType.parse("image/*"),file[8]))
+                    .addFormDataPart("image9",file[9].getName(),RequestBody.create(MediaType.parse("image/*"),file[9]))
+                    .addFormDataPart("image10",file[10].getName(),RequestBody.create(MediaType.parse("image/*"),file[10]))
+                    .addFormDataPart("submit","submit")
+                    .build();
+
+            Request request=new Request.Builder()
+                    .url(serveraddress.address+"/mufiApp/kiosk/pictures/upload/"+login_mem.ID+"/"+login_mem.orderId)
+                    .post(requestBody)
+                    .build();
+
+            OkHttpClient client = new OkHttpClient();
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(okhttp3.Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(okhttp3.Call call, Response response) throws IOException {
+
+                }
+
+            });
+            return true;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
+
+
+    public void hidesoftkey() {
+        getWindow().setWindowAnimations(0);
+        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
+        int newUiOptions = uiOptions;
+        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        if (isImmersiveModeEnabled) {
+            Log.i("Is on?", "Turning immersive mode mode off. ");
+        } else {
+            Log.i("Is on?", "Turning immersive mode mode on.");
+        }
+        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
+    }
+
 
 }
 

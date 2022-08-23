@@ -2,6 +2,7 @@ package org.techtown.client;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -82,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        kiosk_login soft = new kiosk_login();
-        soft.hidesoftkey(getApplicationContext());
+        hidesoftkey();
+
 
         Intent intetnt = getIntent();
 
@@ -105,8 +106,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 backhome++;
                 if(backhome == 15) {
-                    PreferenceManager.clear(idkey);
-                    PreferenceManager.clear(passkey);
+                    SharedPreferences sf = getSharedPreferences("test",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sf.edit();
+                    editor.remove("ID");
+                    editor.remove("PASSKEY");
+                    editor.commit();
                     backhome =0;
                     Intent intent = new Intent(getApplicationContext(),kiosk_login.class);
                     startActivity(intent);
@@ -242,6 +246,23 @@ public class MainActivity extends AppCompatActivity {
                 Log.w("받은 값",""+data);
             }
         });
+    }
+
+
+    public void hidesoftkey() {
+        getWindow().setWindowAnimations(0);
+        int uiOptions = getWindow().getDecorView().getSystemUiVisibility();
+        int newUiOptions = uiOptions;
+        boolean isImmersiveModeEnabled = ((uiOptions | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) == uiOptions);
+        if (isImmersiveModeEnabled) {
+            Log.i("Is on?", "Turning immersive mode mode off. ");
+        } else {
+            Log.i("Is on?", "Turning immersive mode mode on.");
+        }
+        newUiOptions ^= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_FULLSCREEN;
+        newUiOptions ^= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        getWindow().getDecorView().setSystemUiVisibility(newUiOptions);
     }
 
 
