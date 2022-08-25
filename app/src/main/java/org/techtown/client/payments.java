@@ -2,7 +2,6 @@ package org.techtown.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
@@ -25,6 +24,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 
 public class payments extends AppCompatActivity {
+    ProgressDialog customProgressDialog;
 
 
     String resultText ="";
@@ -36,8 +36,12 @@ public class payments extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payments);
 
+        customProgressDialog = new ProgressDialog(this);
+        customProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         try {
             send_pay();
+            customProgressDialog.show();
         } catch (ExecutionException | JSONException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

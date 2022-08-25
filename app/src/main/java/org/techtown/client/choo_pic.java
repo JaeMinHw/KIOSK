@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -75,6 +77,7 @@ public class choo_pic extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
 

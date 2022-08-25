@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private Context idkey;
     private Context passkey;
 
+    TextView textView;
+
     public void onBackPressed() {
         //super.onBackPressed();
     }
@@ -82,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        textView = findViewById(R.id.textView3);
 
         hidesoftkey();
 

@@ -2,17 +2,20 @@ package org.techtown.client;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class choose_count extends AppCompatActivity {
     private TextView Count, text_who;
+    TextView textUI;
     private Button btnmin,  btnplus, button;
     private int count=0;
     public void onBackPressed() {
@@ -36,6 +39,9 @@ public class choose_count extends AppCompatActivity {
 
         text_who.setText(login_mem.name);
         button.setVisibility(View.INVISIBLE);
+
+        textUI = findViewById(R.id.textViewUI);
+        Timer timer = new Timer();
 
         btnmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,13 +75,30 @@ public class choose_count extends AppCompatActivity {
                 // 수량 선택하고 결제 요청 부분으로 이동하고 결제 완료가 나면 사진찍기
                 login_mem.photo_count = count;
                 login_mem.goods = login_mem.frame_num + login_mem.photo_count;
+                timer.cancel();
                 Intent intent = new Intent(getApplicationContext(), payments.class);
                 startActivity(intent);
             }
         });
 
+        countUI c = new countUI();
+        c.execute();
 
-        /*//테스트용
+        textUI.setText(String.valueOf(serveraddress.count/1000));
+
+
+
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        };
+        timer.schedule(timerTask,serveraddress.count);
+
+
+        //테스트용
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +108,37 @@ public class choose_count extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), cameraCapture.class);
                 startActivity(intent);
             }
-        });*/
+        });
+    }
+
+    class countUI extends AsyncTask<Void,Integer,Void> {
+        protected Void doInBackground(Void...voids) {
+            for(int i=serveraddress.count/1000-1;i>=0;i--) {
+                if (isCancelled()) {
+                    break;
+                }
+                try {
+                    Thread.sleep(1000);
+                }catch (InterruptedException e) {
+                    Log.e("Task Exception", "내용: " + e.getMessage());
+                    e.printStackTrace();
+                }
+                final int time2 = i;
+                publishProgress(time2);
+            }
+            cancel(true);
+            return null;
+        }
+
+        protected void onProgressUpdate(Integer...values) {
+            textUI.setText(String.valueOf(values[0]));
+        }
+
+        protected void onCancelled() {
+            Log.d("Task DEBUG", "Task 종료");
+            super.onCancelled();
+        }
+
     }
 
 
